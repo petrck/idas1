@@ -1,0 +1,26 @@
+﻿@using System.Globalization
+@using Erzasoft.Eshop.Helpers
+@using Erzasoft.Web.Helpers
+@using Kendo.Mvc.UI
+
+@*@{
+    var caption = ViewData.ModelMetadata.AdditionalValues[EnumListAttribute.CaptionKey] as string;
+    var value = ((int)Model).ToString(CultureInfo.InvariantCulture);
+}
+
+@(Html.Kendo().DropDownListFor(m => m).OptionLabel(caption).Value(value).BindTo(StringEnum.GetBindData(Model.GetType())))*@
+
+@model dynamic
+@{
+    var defaultValueKey = ViewData.ModelMetadata.AdditionalValues[EnumListAttribute.DefaultValueKey] as string;
+    var placeholderkey = ViewData.ModelMetadata.AdditionalValues[EnumListAttribute.Placeholderkey] as string;
+}
+
+@*@if (ViewContext.ViewData.ModelMetadata.IsRequired)
+    {
+        requiredClass = "Required";
+    }
+    Html.LabelFor(p => p, new { @class = @requiredClass })
+    @Html.EnumDropDownListFor(m => m, null, new { @class = "form-control floating-label", placeholder = @caption })*@
+
+@(Html.EnumDropDownListFor(m => m, @defaultValueKey, new { @class = "form-control", placeholder = @placeholderkey }))

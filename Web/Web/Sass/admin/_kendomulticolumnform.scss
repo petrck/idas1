@@ -1,0 +1,33 @@
+﻿.k-popup-edit-form {
+	.k-edit-form-container {
+		width: 100%;
+
+		.table-form-container {
+			padding: 0 10px;
+		}
+	}
+}
+
+.table-form {
+	.editor-label-cell{ 
+		.editor-label {
+			display: inline-block;
+			margin-top: 5px;
+			width: 100%;
+			padding: 0;
+		}
+	}
+
+	.editor-field-cell {
+		.editor-field-content {
+			> .k-textbox {
+				width: 100%
+			}
+		}
+
+		.k-tooltip {
+			margin: 3px 0 0 5px;
+			position: absolute;
+		}
+	}
+}

@@ -1,0 +1,8 @@
+﻿@using Kendo.Mvc.UI
+@model dynamic
+@{
+    var dataSourceName = this.ViewData.ModelMetadata.AdditionalValues["dataSourceName"] as string;
+    var dataSource = this.ViewData[dataSourceName] as IEnumerable<DropDownListItem>;    
+    dataSource = Enumerable.Repeat(new DropDownListItem { Text = "Není vybrána", Value = "0" }, 1).Concat(dataSource.OrderBy(item => item.Text));    
+}
+@Html.Kendo().DropDownListFor(m => m).BindTo(dataSource).SelectedIndex(0)

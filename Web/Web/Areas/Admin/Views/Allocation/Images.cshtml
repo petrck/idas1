@@ -1,0 +1,45 @@
+﻿@using Erzasoft.DataModel
+@using Erzasoft.Service.Models
+@using Kendo.Mvc.UI
+@{
+    var allocation = this.ViewData["allocation"] as Allocation;
+    ViewBag.HeaderTitle = string.Format("Obrázky kategorie {0}", allocation.Name);
+    Layout = null;
+}
+
+@(Html.Kendo().Grid<ImageModel>()
+      .Name("AllocationImagesGrid")
+      .Columns(columns =>
+          {
+              columns.Bound(p => p.Source).ClientTemplate("# if (Source != '' && Source != null) { #" + "<img src=\"#= Source.replace(\"~/\", \"" + this.Url.Content("~/") + "\") #\" title=\"#= Title #\" width=\"70\" height=\"70\" class=\"productImage\" />" + " # } else { #" + "" + "# } # ").Visible(true).Filterable(false).Sortable(false);
+              columns.Bound(p => p.Title);
+              columns.Command(command =>
+                  {
+                      command.Custom("SetMainImage").Text("Nastavit jako uvodni obrazek").Click("SetMainImage");
+                      command.Edit();
+                      command.Destroy();
+                  });
+          })
+      .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(window => window.Width(500)))
+      .Pageable(p => p.Refresh(true))
+      .Sortable()
+      .Filterable()
+      .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(p => p.Id))
+            .Sort(s => s.Add(p => p.Id))
+            .Read("GetImages", "Allocation", new { allocationId = allocation.Id })
+            .Update("Update", "Image")
+            .Destroy("Delete", "Image")
+      ))
+<p class="uploudDescription">Vyberte obrázek, nebo ho přetáhněte do oblasti selectu.</p>
+<div style="width:45%">
+    @(Html.Kendo().Upload()
+          .Name("imagesUpload")
+          .Async(a => a
+            .Save("UploadImage", "Allocation", new { allocationId = allocation.Id })
+            .AutoUpload(true)
+          )
+          .Events(events => events.Success("uploadImageSucces"))
+          )
+</div>

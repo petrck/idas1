@@ -1,0 +1,17 @@
+﻿@using System.Web.Mvc.Html
+@using Erzasoft.CMS
+@using Erzasoft.CMS.ViewModel
+@model MenuItemViewModel
+
+<li>
+    @Html.DisplayForModel(Model.MenuOptions.ItemTemplatePrefix + Model.MenuItem.GetType().BaseType.Name)
+    @if (Model.HasChilds)
+    {
+        <ul class="dropdown-menu" role="menu">
+            @foreach (var children in Model.Childs)
+            {
+                Html.RenderMenuItem(children);
+            }
+        </ul>
+    }
+</li>

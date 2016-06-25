@@ -1,0 +1,25 @@
+$page-margin: 50px;
+
+header {
+	margin-top: 20px;
+
+	#AdminMenu {
+		padding: 0 $page-margin;
+
+		&.k-widget.k-menu-horizontal > .k-item.k-first {
+			border-width: 0 1px;
+		}
+	}
+}
+
+#main {
+	margin: 10px $page-margin 0 $page-margin;
+
+	.headerTitle {
+		margin: 5px 0;
+	}
+}
+
+footer {
+	margin: 0 $page-margin;
+}

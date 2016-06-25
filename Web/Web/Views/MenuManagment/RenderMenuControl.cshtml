@@ -1,0 +1,232 @@
+﻿@{
+    Layout = null;
+}
+
+<div id="erzasoft-cms-managment" style="height: 0; overflow: hidden;">
+    <div id="cms-window" data-role="window" data-title="Správa stránek" data-actions="[ 'Minimize', 'Close' ]" data-width="700" class="cms-window">
+        <div id="cms-message" data-role="notification" data-append-to="#cms-message-container"></div>
+        <div id="cms-message-container"></div>
+        <div data-role="toolbar" data-items="[ { type: 'button', text: 'Přidat stránku' } ]" data-bind="click: addPageClick"></div>
+        <div data-role="tabstrip" data-animation="false">
+            <ul>
+                <li class="k-state-active">Obsah stránky</li>
+                <li>Menu</li>
+            </ul>
+            <div>
+                <div class="container-fluid">
+                    <div class="form-group">
+                        <label for="erzasoft-cms-seo-title">Title</label>
+                        <input data-bind="value: seoData.Title" name="erzasoft-cms-seo-title" type="text" class="form-control" id="erzasoft-cms-seo-title" placeholder="Title">
+                    </div>
+                    <div class="form-group">
+                        <label for="erzasoft-cms-seo-description">Description</label>
+                        <input data-bind="value: seoData.Description" name="erzasoft-cms-seo-description" type="text" class="form-control" id="erzasoft-cms-seo-description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="erzasoft-cms-seo-keywords">Keywords</label>
+                        <input data-bind="value: seoData.Keywords" name="erzasoft-cms-seo-keywords" type="text" class="form-control" id="erzasoft-cms-seo-keywords" placeholder="Keywords">
+                    </div>
+                </div>
+                <button data-role="button" data-bind="click: savePageContent">Uložit</button>
+            </div>
+            <div>
+                <div class="clearfix">
+                    <div style="width: 30%; float: left">
+                        <div data-role="toolbar" data-items="[ { template: '<span>Vytvořené stránky</span>' } ]"></div>
+                        <div>
+                            <div id="erzasoft-cms-pages-tree" data-role="treeview" data-text-field="Name" data-bind="source: pagesDatasource, events: { drop: dropNewPage }" data-drag-and-drop="true" data-template="erzasoft-cms-page-template"></div>
+                        </div>
+                    </div>
+                    <div style="width: 70%; float: left">
+                        <div data-role="toolbar" data-items="[ { type: 'button', text: 'Přidat organizační položku', id: 'addOrganizationItem' }, { type: 'button', text: 'Přidat odkaz', id: 'addLink' }, { type: 'button', text: 'Přidat route link', id: 'addRouteLink' } ]" data-bind="click: addMenuItem"></div>
+                        <div id="erzasoft-cms-menu-tree" data-role="treeview" data-template="erzasoft-cms-menu-item-template" data-text-field="Title" data-bind="source: menuDatasource, events: { dragstart: menuDragStart }" data-drag-and-drop="true" data-load-on-demand="false"></div>
+                        <button data-role="button" data-bind="click: saveMenu">Uložit menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Okno pro vytvoření organizační položky*@
+    <div id="erzasoft-cms-add-organization-item-window" data-role="window" data-title="Přidat organizační položku menu" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-add-organization-item-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-add-organization-item-title">Title</label>
+                <input required="" name="erzasoft-cms-add-organization-item-title" data-bind="value: newOrganizationItem.title" type="text" class="form-control" id="erzasoft-cms-add-organization-item-title" placeholder="Title" data-required-msg="Zadejte title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-add-organization-item-tooltip">Tooltip</label>
+                <input data-bind="value: newOrganizationItem.tooltip" name="erzasoft-cms-add-organization-item-tooltip" type="text" class="form-control" id="erzasoft-cms-add-organization-item-tooltip" placeholder="Tooltip">
+            </div>
+            <button data-role="button" data-bind="click: closeCreateOrganizationItem">Zrušit</button>
+            <button data-role="button" data-bind="click: createOrganizationItem">Vytvořit</button>
+        </div>
+    </div>
+
+    @*Okno pro editaci organizační položky*@
+    <div id="erzasoft-cms-edit-organization-item-window" data-role="window" data-title="Úprava organizační položky menu" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-edit-organization-item-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-organization-item-title">Title</label>
+                <input required="" name="erzasoft-cms-edit-organization-item-title" data-bind="value: editOrganizationItem.title" type="text" class="form-control" id="erzasoft-cms-edit-organization-item-title" placeholder="Title" data-required-msg="Zadejte title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-organization-item-tooltip">Tooltip</label>
+                <input data-bind="value: editOrganizationItem.tooltip" name="erzasoft-cms-edit-organization-item-tooltip" type="text" class="form-control" id="erzasoft-cms-edit-organization-item-tooltip" placeholder="Tooltip">
+            </div>
+            <button data-role="button" data-bind="click: closeEditOrganizationItem">Zrušit</button>
+            <button data-role="button" data-bind="click: editOrganizationItemSave">Upravit</button>
+        </div>
+    </div>
+
+    @*Okno pro vytvoření odkazu*@
+    <div id="erzasoft-cms-add-link-window" data-role="window" data-title="Přidat odkaz" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-add-link-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-add-link-title">Title</label>
+                <input required="" data-required-msg="Zadejte title" name="erzasoft-cms-add-link-title" data-bind="value: newLink.title" type="text" class="form-control" id="erzasoft-cms-add-link-title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-add-link-tooltip">Tooltip</label>
+                <input data-bind="value: newLink.tooltip" name="erzasoft-cms-add-link-tooltip" type="text" class="form-control" id="erzasoft-cms-add-link-tooltip" placeholder="Tooltip">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-add-link-href">Href</label>
+                <input required="" name="erzasoft-cms-add-link-href" data-url-msg="Zadejte validní odkaz" data-required-msg="Zadejte odkaz" data-bind="value: newLink.href" type="url" class="form-control" id="erzasoft-cms-add-link-href" placeholder="Href">
+            </div>
+            <button data-role="button" data-bind="click: closeCreateLink">Zrušit</button>
+            <button data-role="button" data-bind="click: createLink">Vytvořit</button>
+        </div>
+    </div>
+
+    @*Okno pro odetaci odkazu*@
+    <div id="erzasoft-cms-edit-link-window" data-role="window" data-title="Upravit odkaz" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-edit-link-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-link-title">Title</label>
+                <input required="" data-required-msg="Zadejte title" name="erzasoft-cms-edit-link-title" data-bind="value: editLink.title" type="text" class="form-control" id="erzasoft-cms-edit-link-title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-link-tooltip">Tooltip</label>
+                <input data-bind="value: editLink.tooltip" name="erzasoft-cms-edit-link-tooltip" type="text" class="form-control" id="erzasoft-cms-edit-link-tooltip" placeholder="Tooltip">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-link-href">Href</label>
+                <input required="" name="erzasoft-cms-edit-link-href" data-url-msg="Zadejte validní odkaz" data-required-msg="Zadejte odkaz" data-bind="value: editLink.href" type="url" class="form-control" id="erzasoft-cms-edit-link-href" placeholder="Href">
+            </div>
+            <button data-role="button" data-bind="click: closeEditLink">Zrušit</button>
+            <button data-role="button" data-bind="click: editLinkSave">Upravit</button>
+        </div>
+    </div>
+
+    @*Okno pro vytvoření route linku*@
+    <div id="erzasoft-cms-add-route-link-window" data-role="window" data-title="Přidat route odkaz" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-add-route-link-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-add-route-link-title">Title</label>
+                <input required="" data-required-msg="Zadejte title" name="erzasoft-cms-add-route-link-title" data-bind="value: newRouteLink.title" type="text" class="form-control" id="erzasoft-cms-add-route-link-title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-add-route-link-tooltip">Tooltip</label>
+                <input data-bind="value: newRouteLink.tooltip" name="erzasoft-cms-add-route-link-tooltip" type="text" class="form-control" id="erzasoft-cms-add-route-link-tooltip" placeholder="Tooltip">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-add-route-link-route">Route</label>
+                <input required="" name="erzasoft-cms-add-route-link-route" data-required-msg="Zadejte routu" data-bind="value: newRouteLink.route" type="text" class="form-control" id="erzasoft-cms-add-route-link-route" placeholder="Route">
+            </div>
+            <button data-role="button" data-bind="click: closeCreateRouteLink">Zrušit</button>
+            <button data-role="button" data-bind="click: createRouteLink">Vytvořit</button>
+        </div>
+    </div>
+
+    @*Okno pro editaci route linku*@
+    <div id="erzasoft-cms-edit-route-link-window" data-role="window" data-title="Přidat route odkaz" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-edit-route-link-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-route-link-title">Title</label>
+                <input required="" data-required-msg="Zadejte title" name="erzasoft-cms-edit-route-link-title" data-bind="value: editRouteLink.title" type="text" class="form-control" id="erzasoft-cms-edit-route-link-title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-route-link-tooltip">Tooltip</label>
+                <input data-bind="value: editRouteLink.tooltip" name="erzasoft-cms-edit-route-link-tooltip" type="text" class="form-control" id="erzasoft-cms-edit-route-link-tooltip" placeholder="Tooltip">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-route-link-route">Route</label>
+                <input required="" name="erzasoft-cms-edit-route-link-route" data-required-msg="Zadejte routu" data-bind="value: editRouteLink.route" type="text" class="form-control" id="erzasoft-cms-edit-route-link-route" placeholder="Route">
+            </div>
+            <button data-role="button" data-bind="click: closeEditRouteLink">Zrušit</button>
+            <button data-role="button" data-bind="click: editRouteLinkSave">Upravit</button>
+        </div>
+    </div>
+
+    @*Okno pro vytvoření stránky*@
+    <div id="erzasoft-cms-add-page-window" data-role="window" data-title="Přidat stránku" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-add-page-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-add-page-name">Name</label>
+                <input required="" data-required-msg="Zadejte název" name="erzasoft-cms-add-page-name" data-bind="value: newPage.Name" type="text" class="form-control" id="erzasoft-cms-add-page-name" placeholder="Name">
+            </div>
+            <button data-role="button" data-bind="click: closeAddPage">Zrušit</button>
+            <button data-role="button" data-bind="click: addPageSave">Vytvořit</button>
+        </div>
+    </div>
+
+    @*Okno pro editaci stránky v menu*@
+    <div id="erzasoft-cms-edit-page-window" data-role="window" data-title="Upravit stránku v menu" data-width="445" data-visible="false" data-modal="true">
+        <div style="width: 400px;" data-role="validator" id="erzasoft-cms-edit-page-validator">
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-page-title">Title</label>
+                <input required="" data-required-msg="Zadejte title" name="erzasoft-cms-edit-page-title" data-bind="value: editPageItem.title" type="text" class="form-control" id="erzasoft-cms-edit-page-title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label for="erzasoft-cms-edit-page-tooltip">Tooltip</label>
+                <input name="erzasoft-cms-edit-page-tooltip" data-bind="value: editPageItem.tooltip" type="text" class="form-control" id="erzasoft-cms-edit-page-tooltip" placeholder="Tooltip">
+            </div>
+            <button data-role="button" data-bind="click: closeEditPage">Zrušit</button>
+            <button data-role="button" data-bind="click: editPageSave">Upravit</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/kendo-ui-template" id="erzasoft-cms-menu-item-template">
+    # if (item.Editable === true) { #
+    <button type="button" class="btn btn-default btn-xs edit-menu-item"><span class="glyphicon glyphicon-pencil"></span></button>
+    <button type="button" class="btn btn-default btn-xs delele-menu-item"><span class="glyphicon glyphicon-remove"></span></button>
+    # } #
+    #= item.Title #
+</script>
+
+<script type="text/kendo-ui-template" id="erzasoft-cms-page-template">
+
+    @*<button type="button" class="btn btn-default btn-xs edit-page-item"><span class="glyphicon glyphicon-pencil"></span></button>*@
+    <button type="button" class="btn btn-default btn-xs delele-page-item"><span class="glyphicon glyphicon-remove"></span></button>
+
+    #= item.Name #
+</script>
+
+<script type="text/javascript">
+    window.cmstreereadurl = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("GetMenuItems", "MenuManagment")))";
+    window.cmstreesaveurl = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("SaveMenu", "MenuManagment")))";
+    window.cmscreatepageurl = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("CreatePage", "PageManagment")))";
+    window.cmsreadpagesurl = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("GetPages", "PageManagment")))";
+    window.cmsdeletepageurl = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("DeletePage", "PageManagment")))";
+    window.cmssavepagecontenturl = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("SaveContent", "ContentManagment")))";
+
+    window.erzasoftKendoEditorCreate = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Create", "ImageBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoEditorRead = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Read", "ImageBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoEditorDestroy = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Destroy", "ImageBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoEditorUpload = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Upload", "ImageBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoEditorThumbnail = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Thumbnail", "ImageBrowser", new { area = "Admin" })))";
+
+    window.erzasoftKendoFileEditorCreate = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Create", "FileBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoFileEditorRead = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Read", "FileBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoFileEditorDestroy = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Destroy", "FileBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoFileEditorUpload = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Upload", "FileBrowser", new { area = "Admin" })))";
+    window.erzasoftKendoFileEditorThumbnail = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("Thumbnail", "FileBrowser", new {area = "Admin"})))";
+
+    window.erzasoftKendoEditorImage = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Content("~/Upload/Editor/")))";
+    window.erzasoftKendoEditorFile = "@Html.Raw(Ajax.JavaScriptStringEncode(Url.Content("~/Upload/Editor/")))";
+
+    window.loadSeoDataUrl = "@(Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("GetSeoData", "SeoDataManagment", new RouteValueDictionary { { "key", ViewContext.ParentActionViewContext.ViewBag.SeoDataKey } }))))";
+    window.saveSeoDataUrl = "@(Html.Raw(Ajax.JavaScriptStringEncode(Url.Action("SaveSeoData", "SeoDataManagment", new RouteValueDictionary { { "key", ViewContext.ParentActionViewContext.ViewBag.SeoDataKey } }))))";
+</script>

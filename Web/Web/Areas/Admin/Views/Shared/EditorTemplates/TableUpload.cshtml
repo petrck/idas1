@@ -1,0 +1,16 @@
+﻿@model string
+@using System.Web.Mvc.Html
+@using Kendo.Mvc.UI
+@{
+    var uniqueId = Guid.NewGuid().ToString();
+}
+
+<script type="text/javascript">
+    function tableUploadComplete() {
+        $("input[name=@Html.NameFor(p => p)]").val("@uniqueId").trigger("change");
+    }
+</script>
+
+<input type="hidden" name="@Html.NameFor(p => p)" value="@Model" />
+
+@Html.Kendo().Upload().Name("Upload").Multiple(true).Async(a => a.Save("UploadOnCreate", "TableUpload", new { id = uniqueId }).SaveField("files")).Events(e => e.Complete("tableUploadComplete"))

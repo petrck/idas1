@@ -1,0 +1,5 @@
+﻿@using System.Web.Mvc.Html
+@using Kendo.Mvc.UI
+@model string
+
+@(Html.Kendo().Upload().Name(Html.IdFor(Model => Model).ToString()).Multiple(false).Deferred())

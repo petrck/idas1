@@ -1,0 +1,10 @@
+﻿@using System.Diagnostics
+@using System.Web.Routing
+@using Erzasoft.CMS.Model
+@model Erzasoft.CMS.ViewModel.MenuItemViewModel
+@{
+    var menuPageItem = Model.MenuItem as MenuPageItem;
+    Debug.Assert(menuPageItem != null);
+}
+
+<a href="@Url.Action("Index", "Page", new RouteValueDictionary { { "id", menuPageItem.PageId } })" title="@menuPageItem.Tooltip">@menuPageItem.Title</a>

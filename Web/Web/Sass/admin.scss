@@ -1,0 +1,251 @@
+/*@import "base";*/
+/*@import "compass/typography/text/replacement";*/
+
+@import "Admin/multicolumnform";
+@import "Admin/kendomulticolumnform";
+
+#message {
+    border: 1px solid;
+    margin: 10px 0;
+    padding: 15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    display: none;
+}
+
+.info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+
+.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+
+.field-validation-error {
+    color: #EF6617;
+}
+
+#main {
+    text-align: center;
+
+    .k-widget {
+        text-align: left;
+        display: inline-block;
+    }
+
+    .k-grid-toolbar, .k-grid-pager {
+        display: block;
+        //		text-align: left;
+    }
+}
+
+.k-window-content.k-content table td {
+    vertical-align: middle;
+}
+
+.required-star {
+    padding-left: 5px;
+}
+
+.orderDetails {
+    margin-top: 5px;
+
+    ul {
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    li {
+        list-style: none;
+        padding: 5px;
+
+        label {
+            width: 50px;
+            display: inline-block;
+        }
+    }
+
+    .title {
+        background-color: #7EA700;
+        color: #ffffff;
+        padding: 5px;
+    }
+
+    div {
+        margin-left: 15px;
+    }
+
+    .orderShipping {
+        float: left;
+    }
+
+    .orderPayment {
+        float: left;
+    }
+
+    .orderBillAddress {
+        float: left;
+    }
+
+    .orderShippAddress {
+        float: left;
+    }
+
+    .orderNote {
+        float: left;
+    }
+}
+
+.k-content.k-state-active {
+    overflow: hidden;
+}
+
+#bill-content {
+    width: 780px;
+    font-size: 0.9em;
+
+    table tr td {
+        width: 70px;
+    }
+
+    table tr td.product-name {
+        width: 200px;
+    }
+
+    table tr td.tax {
+        width: 50px;
+    }
+
+    #header {
+        padding: 15px;
+        border: solid #4f4f4f 1px;
+        /*@include clearfix();*/
+
+        #bill-name {
+            float: left;
+            width: 49%;
+        }
+
+        #bill-number {
+            float: left;
+            width: 49%;
+        }
+    }
+
+    .title {
+        font-weight: bold;
+    }
+
+    #account {
+        margin-top: -1px;
+        border: solid #4f4f4f 1px;
+
+        table td {
+            min-width: 49px;
+            max-width: 100px;
+            text-align: left;
+        }
+    }
+
+    #participant-info {
+        margin-top: -1px;
+        padding: 15px;
+        border: solid #4f4f4f 1px;
+        /*@include clearfix();*/
+
+        .ic, .dic {
+            display: inline-block;
+        }
+        //		.dic {
+        //			margin-left: 10px;
+        //		}
+        #consumer, #supplier {
+            float: left;
+            width: 49%;
+        }
+    }
+
+    table {
+        width: 97.5%;
+    }
+
+    table td, table th {
+        vertical-align: top;
+        padding: 5px;
+        /*min-width: 50px;*/
+    }
+
+    #bill-products {
+        margin-top: -1px;
+        padding: 15px;
+        border: solid #4f4f4f 1px;
+    }
+}
+
+a:visited {
+    color: #222;
+}
+
+table#legend {
+    display: inline-block;
+
+    .gridSquare {
+        margin: 0;
+    }
+
+    td.title {
+        padding: 0 15px 0 5px;
+    }
+}
+
+#appendto {
+    display: inline-block;
+    border: 0;
+}
+
+.gridSquare {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.czPostSquare {
+    background: #FFCD33;
+    margin-top: 5px;
+}
+
+.localSquare {
+    background: #8c6b00;
+    margin-top: 5px;
+}
+
+.beforeHand {
+    background: #0087cc;
+    margin-top: 5px;
+}
+
+.onHand {
+    background: #00a500;
+    margin-top: 5px;
+}
+
+.center {
+    text-align: left;
+    display: inline-block;
+}
+
+.align-right {
+    text-align: right;
+}

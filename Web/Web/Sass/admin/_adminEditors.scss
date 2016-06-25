@@ -1,0 +1,138 @@
+﻿$error-background-color: #F1A9C0 !default;
+
+.k-edit-form-container {
+    width: auto;
+
+    .line-form {
+        .editor-label {
+            width: 140px;
+            padding-right: 10px;
+            display: block;
+            float: left;
+        }
+
+        .editor-field {
+            display: block;
+            float: left;
+
+			.k-invalid {
+				background-color: $error-background-color;
+			}
+
+            &.column-span-1 {
+                width: 200px;
+
+                > textarea, > input {
+                    width: 196px;
+                }
+
+                > .k-textbox, > .k-numerictextbox {
+                    width: 200px;
+                }
+            }
+
+            &.column-span-2 {
+                width: 550px;
+
+                > .k-textbox, > .k-numerictextbox, > textarea {
+                    width: 550px;
+                }
+
+                > input {
+                    width: 546px;
+                }
+            }
+
+            &.column-span-3 {
+                width: 900px;
+
+                > .k-textbox, > .k-numerictextbox {
+                    width: 56.4em;
+                }
+
+                > textarea, > input {
+                    width: 56.25em;
+                }
+            }
+
+            .k-textbox {
+                .k-input {
+                    border: 0;
+                }
+            }
+        }
+    }
+
+	.table-form {
+		.editor-label-cell{
+			text-align: right;
+			padding: 7px 3px 0 6px;
+
+			.editor-label {
+				width: auto;
+				padding: 0;
+			}
+		}
+
+		.editor-field-cell {
+			padding: 0 6px 0 3px;
+			min-width: 209px;
+
+			&[colspan="3"] {
+				min-width: 418px;
+			}
+		}
+
+		.editor-field {
+			width: 100%;
+
+			.k-invalid {
+				background-color: $error-background-color;
+			}
+
+			> .k-textbox {
+				width: 100%;
+
+				.k-input {
+					border-width: 0;
+				}
+			}
+
+			> .k-numerictextbox, > .k-combobox {
+				width: 100%;
+				padding: 0;
+			}
+
+			> input[type=text] {
+				width: 99%;
+				margin-top: 4px;
+			}
+
+			> input[type=checkbox] {
+				margin-top: 10px;
+			}
+
+			> .k-editor {
+				width: 100% !important;
+			}
+
+			.multilineText {
+				height: 150px;
+			}
+
+			&.column-span-1 {
+				/*> .k-textbox {
+					width: 200px;
+				}
+
+				> input[type=text] {
+					width: 188px;
+				}
+
+				> textarea {
+					width: 200px;
+				}*/
+			}
+		}
+	}
+}

@@ -1,0 +1,9 @@
+﻿@using Erzasoft.CMS
+@model Erzasoft.CMS.ViewModel.MenuViewModel
+
+<ul>
+    @foreach (var children in Model.Childs)
+    {
+        Html.RenderMenuItem(children, "FooterMenuItemContainer");
+    }
+</ul>

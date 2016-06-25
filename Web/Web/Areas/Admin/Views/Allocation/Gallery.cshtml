@@ -1,0 +1,153 @@
+﻿@using Erzasoft.DataModel
+@using Erzasoft.Service.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.HeaderTitle = "Galerie";
+}
+
+@(Html.Kendo().Grid<AllocationModel>()
+      .Name("categoryGrid")
+      .Columns(columns =>
+      {
+          columns.Bound(s => s.Name).Title("Kategorie");
+
+          columns.Command(command =>
+          {
+              command.Custom("images").Text("Obrázky").Click(a => "imageClick");
+              //command.Edit();
+              //command.Destroy();
+          });
+      })
+      .ClientDetailTemplateId("groupTemplate")
+      .ToolBar(s =>
+      {
+          //s.Create();
+      })
+
+
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+          .Sortable()
+          //.Events(s => s.DataBound("categoryGridDataBound"))
+          .Pageable(p => p.PageSizes(true).Refresh(true))
+          .ColumnMenu()
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model =>
+            {
+                model.Id(p => p.Id);
+            })
+            .Create(create => create.Action("CreateCategory", "Allocation", new { allocationType = AllocationTypeEnum.Image }))
+            .Read(read => read.Action("GetCategories", "Allocation", new { allocationType = AllocationTypeEnum.Image }))
+            .Update(update => update.Action("UpdateCategory", "Allocation"))
+            .Destroy(destroy => destroy.Action("Delete", "Allocation"))
+            .Sort(s => s.Add(t => t.Name)))
+)
+
+<script id ="groupTemplate" type="text/kendo-tmpl">
+    <p>Skupiny</p>
+    @(Html.Kendo().Grid<AllocationModel>()
+    .Name("groupGrid_#=Id#")
+    .Columns(columns =>
+    {
+        columns.Bound(s => s.Name).Title("Podkategorie");
+        columns.Command(command =>
+        {
+            command.Custom("images2").Text("Obrázky").Click(a => "imageClick");
+            command.Edit();
+            command.Destroy();
+        });
+    })
+    .ClientDetailTemplateId("subGroupTemplate")
+    .ToolBar(s => s.Create())
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+    .Sortable()
+    //.Events(s => s.DataBound("groupGridDataBound"))
+    .Pageable(p => p.PageSizes(true).Refresh(true))
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Model(model =>
+    {
+        model.Id(p => p.Id);
+        model.Field(s => s.Visible).DefaultValue(true);
+    })
+    .Create(create => create.Action("CreateGroup", "Allocation", new { aaacategoryId = "#= Id #", allocationType = AllocationTypeEnum.Image }))
+    .Read(read => read.Action("GetGroups", "Allocation", new { aaacategoryId = "#= Id #" }))
+    .Update(update => update.Action("UpdateGroup", "Allocation"))
+    .Destroy(destroy => destroy.Action("Delete", "Allocation"))
+    .Sort(s => s.Add(t => t.Name)))
+    .ToClientTemplate())
+    </script>
+
+    <script id="subGroupTemplate" type="text/kendo-tmpl">
+        <p>Podskupiny</p>
+        @(Html.Kendo().Grid<AllocationModel>()
+        .Name("subGroupGrid_#=Id#")
+        .Columns(columns =>
+        {
+            columns.Bound(s => s.Name).Title("Podskupina");
+            columns.Command(command =>
+            {
+                command.Custom("images3").Text("Obrázky").Click(a => "imageClick");
+                command.Edit();
+                command.Destroy();
+            });
+        })
+        .ToolBar(s => s.Create())
+        .Editable(editable => editable.Mode(GridEditMode.PopUp))
+        .Sortable()
+        //.Events(s => s.DataBound("subGroupGridDataBound"))
+        .Pageable(p => p.PageSizes(true).Refresh(true))
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+        })
+        .Create(create => create.Action("CreateSubGroup", "Allocation", new { aaagroupId = "#= Id #", allocationType = AllocationTypeEnum.Image }))
+        .Read(read => read.Action("GetSubGroups", "Allocation", new { aaagroupId = "#= Id #" }))
+        .Update(update => update.Action("UpdateSubGroup", "Allocation"))
+        .Destroy(destroy => destroy.Action("Delete", "Allocation"))
+        .Sort(s => s.Add(t => t.Name)))
+        .ToClientTemplate())
+    </script>
+    @(Html.Kendo().Window()
+              .Name("Images")
+              .Visible(false)
+              .Modal(true)
+              .Draggable(true)
+              .Title("Obrázky")
+              .Width(700))
+
+<script type="text/javascript">
+        var lastGroupOpendWindow = 0;
+        var lastSubGroupOpendWindow = 0;
+
+        function imageClick(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("Images", "Allocation", new { allocationId = "#= Id #" })))");
+            var url = urlTemplate(dataItem);
+            EditAjaxWindow("#Images", url);
+        }
+
+        function uploadImageSucces(e) {
+            var grid = $("#AllocationImagesGrid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+
+        function SetMainImage(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("SetMainImage", "Allocation", new { imageId = "#= Id #" })))");
+            var url = urlTemplate(dataItem);
+
+            $.post(url).success(function () {
+                var grid = $("#AllocationImagesGrid").data("kendoGrid");
+                grid.dataSource.read();
+            });
+        }
+    </script>

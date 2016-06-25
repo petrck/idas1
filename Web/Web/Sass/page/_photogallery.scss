@@ -1,0 +1,47 @@
+﻿/*
+===========================================
+                HEADER
+===========================================
+*/
+
+@import "../_variables.scss";
+@import "../bootstrap/_variables.scss";
+
+section {
+
+    .album {
+        figcaption {
+            text-align: center;
+        }
+    }
+
+    .other {
+        figcaption {
+         font-weight: bold;
+         margin-left: 20px;
+         margin-top: 60px;
+        }
+    }
+
+
+
+    .miniature {
+        display: inline-block;
+        box-shadow: 10px 10px 5px #ccc;
+        margin: 20px;
+        margin-top: 0;
+        transition: all ease-in .2s;
+
+        img {
+            max-width: 100%;
+            width: auto;
+        }
+
+        &:hover {
+            box-shadow: 10px 10px 5px #999;
+
+            img {
+            }
+        }
+    }
+}

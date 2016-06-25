@@ -1,0 +1,85 @@
+﻿@using Erzasoft.CMS
+@using Kendo.Mvc.UI
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"].ToString();
+    var seoDateKey = ViewBag.SeoDataKey as string;
+}
+<!doctype html>
+<html lang="cs">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta name="robots" content="index, follow, noarchive">
+    <meta name="author" content="erzasoft">
+    <meta name="viewport" content="width=device-width">
+    <link rel="Shortcut icon" href="@Url.Content("~/Images/favicon.ico")" type="image/x-icon" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta name="msapplication-config" content="none" />
+    <link rel="apple-touch-icon" href="@Url.Content("~/Images/Logo.png")" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/kendocss")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/adminkendoscripts")
+    @Scripts.Render("~/bundles/adminscripts")
+
+    @RenderSection("head", required: false)
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div >
+        <header class="container clearfix">
+            <a href="@Url.Action("Index", "Home")" alt="homepage link" class="homepage-link"></a>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand visible-xs" href="#">Zobrazení menu</a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <li>@Html.ActionLink("Správu pracovníků", "Index", "Employee", null, new { @class = "link" })</li>
+                                <li>@Html.ActionLink("Správu zákazníků ", "Index", "Shop", null, new { @class = "link" })</li>
+                                <li>@Html.ActionLink("Správu adres ", "Index", "Address", null, new { @class = "link" })</li>
+                                <li>@Html.ActionLink("Správu objednávek ", "Index", "Order", null, new { @class = "link" })</li>
+                                <li>@Html.ActionLink("Správu produktů ", "Index", "Product", null, new { @class = "link" })</li>
+                                <li>@Html.ActionLink("Přehled objednávek ", "Index", "OrderHistory", null, new { @class = "link" })</li>
+                            </ul>
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
+            </div>
+        </header>
+        <span id="staticNotification"></span>
+        <div id="main" role="main" class="clearfix container">
+
+            @RenderBody()
+        </div>
+        <div class="push"></div>
+    </div>
+    @*<footer class="container-fluid">
+        <div class="inner">
+            
+        </div>
+    </footer>*@
+
+
+    <script type="text/javascript">
+        $.validator.defaults.ignoreTitle = true;
+        kendo.culture("@UICulture");
+    </script>
+
+    @RenderSection("Scripts", false)
+    @Html.Kendo().DeferredScripts()
+</body>
+</html>

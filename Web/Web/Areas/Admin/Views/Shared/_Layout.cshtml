@@ -1,0 +1,55 @@
+﻿@using Erzasoft.MvcUtility
+@using Kendo.Mvc.UI
+<!doctype html>
+<html lang="cs">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="" />
+    <meta name="viewport" content="width=device-width">
+    <link rel="Shortcut icon" href="@Url.Content("~/Images/favicon.ico")" type="image/x-icon" />
+    @Styles.Render("~/Content/admincss")
+    @Styles.Render("~/Content/kendocss")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/adminkendoscripts")
+    @Scripts.Render("~/bundles/adminscripts")
+</head>
+<body>
+    <div id="message"></div>
+    <header>
+        @Html.Kendo().Menu().Name("AdminMenu").Items(level1 =>
+                {
+                    level1.Add().Text("<< Návrat na stránku MŠ").Url(Url.Action("Index", "Home", new {area = ""}));
+                    level1.Add().Text("Aktuality/Novinky").Url(Url.Action("Index", "News"));
+                    level1.Add().Text("Fotogalerie").Url(Url.Action("Gallery", "Allocation"));
+                })
+    </header>
+    <div id="main" role="main" class="clearfix">
+        @if (!string.IsNullOrWhiteSpace(ViewBag.HeaderTitle))
+        {
+            <h1 class="headerTitle">@ViewBag.HeaderTitle</h1>
+        }
+        @RenderBody()
+    </div>
+    <footer>
+        <center>
+            <p>Administrace Mateřská škola Větrník Červený Kostelec</p>
+        </center>
+    </footer>
+    @Html.Kendo().Culture()
+    <script type="text/javascript">
+        kendo.culture("@UICulture");
+    </script>
+
+    <script type="text/javascript">
+        $.validator.defaults.ignoreTitle = true;
+    </script>
+
+    @Html.Message()
+</body>
+</html>

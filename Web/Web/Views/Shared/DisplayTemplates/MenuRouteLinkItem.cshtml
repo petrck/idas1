@@ -1,0 +1,17 @@
+﻿@using System.Diagnostics
+@using Erzasoft.CMS
+@using Erzasoft.CMS.Model
+@model Erzasoft.CMS.ViewModel.MenuItemViewModel
+@{
+    var menuLinkItem = Model.MenuItem as MenuRouteLinkItem;
+    Debug.Assert(menuLinkItem != null);
+}
+
+@if (Model.HasChilds)
+{
+    <a href="@Url.RouteUrl(menuLinkItem.Route.ToRouteValueDictionary())" title="@menuLinkItem.Tooltip" class="dropdown-toggle" data-toggle="dropdown">@menuLinkItem.Title <span class="caret"></span></a>
+}
+else
+{
+    <a href="@Url.RouteUrl(menuLinkItem.Route.ToRouteValueDictionary())" title="@menuLinkItem.Tooltip">@menuLinkItem.Title</a>
+}

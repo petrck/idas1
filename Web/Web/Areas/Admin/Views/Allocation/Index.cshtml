@@ -1,0 +1,481 @@
+﻿@using Erzasoft.DataModel
+@using Erzasoft.Service.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.HeaderTitle = "Kategorie";
+}
+
+@(Html.Kendo().Grid<AllocationModel>()
+          .Name("categoryGrid")
+          .Columns(columns =>
+              {
+                  columns.Bound(s => s.Name).Title("Kategorie");
+
+                  columns.Command(command =>
+                      {
+                          command.Custom("addCategoryProduct").Text("Produkty").Click("addCategoryProductClick");
+                          command.Custom("images").Text("Obrázky").Click(a => "imageClick");
+                          command.Edit();
+                          command.Destroy();
+                      });
+              })
+          .ClientDetailTemplateId("groupTemplate")
+          .ToolBar(s => s.Create())
+          .Editable(editable => editable.Mode(GridEditMode.PopUp))
+          .Sortable()
+          .Events(s => s.DataBound("categoryGridDataBound"))
+          .Pageable(p => p.PageSizes(true).Refresh(true))
+          .ColumnMenu()
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model =>
+                {
+                    model.Id(p => p.Id);
+                    model.Field(s => s.Visible).DefaultValue(true);
+                    model.Field(s => s.Color).DefaultValue("rgba(255,255,255,1)");
+                })
+            .Create(create => create.Action("CreateCategory", "Allocation", new { allocationType = AllocationTypeEnum.Product }))
+            .Read(read => read.Action("GetCategories", "Allocation", new { allocationType = AllocationTypeEnum.Product }))
+            .Update(update => update.Action("UpdateCategory", "Allocation"))
+            .Destroy(destroy => destroy.Action("Delete", "Allocation"))
+            .Sort(s => s.Add(t => t.Name)))
+)
+
+<script id="groupTemplate" type="text/kendo-tmpl">
+    <p>Skupiny</p>
+    @(Html.Kendo().TabStrip()
+          .Name("tabStrip_#=Id#")
+          .SelectedIndex(0)
+            //.Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+          .Items(items =>
+              {
+                  items.Add().Text("Skupiny").Content(@<text>
+                    @(Html.Kendo().Grid<AllocationModel>()
+                          .Name("groupGrid_#=Id#")
+                          .Columns(columns =>
+                              {
+                                  columns.Bound(s => s.Name).Title("Skupina");
+                                  columns.Command(command =>
+                                      {
+                                          command.Custom("addGroupProduct").Text("Produkty").Click("addGroupProductClick");
+                                          command.Custom("images").Text("Obrázky").Click(a => "imageClick");
+                                          //command.Custom("hideGroupAllocation").Text("Schovat").Click("hideGroupClick");
+                                          //command.Custom("showGroupAllocation").Text("Zobrazit").Click("showGroupClick");
+                                          command.Edit();
+                                          command.Destroy();
+                                      });
+                              })
+                          .ClientDetailTemplateId("subGroupTemplate")
+                          .ToolBar(s => s.Create())
+                          .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                          .Sortable()
+                          .Events(s => s.DataBound("groupGridDataBound"))
+                          .Pageable(p => p.PageSizes(true).Refresh(true))
+                          .ColumnMenu()
+                          .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model =>
+                            {
+                                model.Id(p => p.Id);
+                                model.Field(s => s.Visible).DefaultValue(true);
+                                model.Field(s => s.Color).DefaultValue("rgba(255,255,255,1)");
+                            })
+                        .Create(create => create.Action("CreateGroup", "Allocation", new { aaacategoryId = "#= Id #", allocationType = AllocationTypeEnum.Product }))
+                        .Read(read => read.Action("GetGroups", "Allocation", new { aaacategoryId = "#= Id #" }))
+                        .Update(update => update.Action("UpdateGroup", "Allocation"))
+                        .Destroy(destroy => destroy.Action("Delete", "Allocation"))
+                        .Sort(s => s.Add(t => t.Name)))
+                          .ToClientTemplate())
+                </text>
+                      );
+                  items.Add().Text("Produkty").Content(@<text>
+                        @(Html.Kendo().Grid<ProductModel>()
+                          .Name("productCategoryGrid_#=Id#")
+                          .Columns(columns =>
+                              {
+                                  columns.Bound(s => s.Name);
+                                  columns.Command(command =>
+                                      {
+                                          //command.Edit();
+                                          command.Custom("removeCategoryProduct").Text("Odebrat produkt").HtmlAttributes(new Dictionary<string, object> { { "data-productid", "\\#= Id \\#" }, { "data-categoryid", "#= Id #" } }).Click("removeCategoryProductClick");
+                                      });
+                              })
+                          .Sortable()
+                          .Pageable(p => p.PageSizes(true).Refresh(true))
+                          .ColumnMenu()
+                          .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.Id))
+                        .Read(read => read.Action("GetCategoryProducts", "Allocation", new { aaacategoryId = "#= Id #" }))
+                        //.Update("UpdateProduct", "Product", new { importCenterId = importCenterId })
+                        .Sort(s => s.Add(t => t.Name)))
+                          .ToClientTemplate())
+                </text>
+                      );
+              })
+                                      .ToClientTemplate())
+
+</script>
+
+<script id="subGroupTemplate" type="text/kendo-tmpl">
+    <p>Podskupiny</p>
+    @(Html.Kendo().TabStrip()
+          .Name("tabStrip_#=Id#")
+          .SelectedIndex(0)
+            //.Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+          .Items(items =>
+              {
+                  items.Add().Text("Podskupiny").Content(@<text>
+                    @(Html.Kendo().Grid<AllocationModel>()
+                          .Name("subGroupGrid_#=Id#")
+                          .Columns(columns =>
+                              {
+                                  columns.Bound(s => s.Name).Title("Podskupina");
+                                  columns.Command(command =>
+                                      {
+                                          command.Custom("addSubGroupProduct").Text("Produkty").Click("addSubGroupProductClick");
+                                          command.Custom("images").Text("Obrázky").Click(a => "imageClick");
+                                          //command.Custom("hideSubGroupAllocation").Text("Schovat").Click("hideSubGroupClick");
+                                          //command.Custom("showSubGroupAllocation").Text("Zobrazit").Click("showSubGroupClick");
+                                          command.Edit();
+                                          command.Destroy();
+                                      });
+                              })
+                          .ClientDetailTemplateId("productTemplate")
+                          .ToolBar(s => s.Create())
+                          .Editable(editable => editable.Mode(GridEditMode.PopUp))
+                          .Sortable()
+                          .Events(s => s.DataBound("subGroupGridDataBound"))
+                          .Pageable(p => p.PageSizes(true).Refresh(true))
+                          .ColumnMenu()
+                          .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Model(model =>
+                                                            {
+                                                                model.Id(p => p.Id);
+                                                                model.Field(s => s.Visible).DefaultValue(true);
+                                                                model.Field(s => s.Color).DefaultValue("rgba(255,255,255,1)");
+                                                            })
+                                                        .Create(create => create.Action("CreateSubGroup", "Allocation", new { aaagroupId = "#= Id #", allocationType = AllocationTypeEnum.Product }))
+                                                        .Read(read => read.Action("GetSubGroups", "Allocation", new { aaagroupId = "#= Id #" }))
+                                                        .Update(update => update.Action("UpdateSubGroup", "Allocation"))
+                            .Destroy(destroy => destroy.Action("Delete", "Allocation"))
+                                                        .Sort(s => s.Add(t => t.Name)))
+                          .ToClientTemplate())
+                </text>
+                      );
+                  items.Add().Text("Produkty").Content(@<text>
+                        @(Html.Kendo().Grid<ProductModel>()
+                          .Name("productGroupGrid_#=Id#")
+                          .Columns(columns =>
+                              {
+                                  columns.Bound(s => s.Name);
+                                  columns.Command(command =>
+                                      {
+                                          command.Custom("removeGroupProduct").Text("Odebrat produkt").HtmlAttributes(new Dictionary<string, object> { { "data-productid", "\\#= Id \\#" }, { "data-groupid", "#= Id #" } }).Click("removeGroupProductClick");
+                                      });
+                              })
+                          .Sortable()
+                          .Pageable(p => p.PageSizes(true).Refresh(true))
+                          .ColumnMenu()
+                          .DataSource(dataSource => dataSource
+                                                        .Ajax()
+                                                        .Model(model => model.Id(p => p.Id))
+                                                        .Read(read => read.Action("GetGroupProducts", "Allocation", new { aaagroupId = "#= Id #" }))
+                                                        .Sort(s => s.Add(t => t.Name)))
+                          .ToClientTemplate())
+                </text>
+                      );
+              })
+                                      .ToClientTemplate())
+
+</script>
+
+<script id="productTemplate" type="text/kendo-tmpl">
+    @(Html.Kendo().Grid<ProductModel>()
+          .Name("productSubGroupGrid_#=Id#")
+          .Columns(columns =>
+              {
+                  columns.Bound(s => s.Name);
+                  columns.Command(command =>
+                      {
+                          command.Custom("removeSubGroupProduct").Text("Odebrat produkt").HtmlAttributes(new Dictionary<string, object> { { "data-productid", "\\#= Id \\#" }, { "data-subgroupid", "#= Id #" } }).Click("removeSubGroupProductClick");
+                      });
+              })
+          .Sortable()
+          .Pageable(p => p.PageSizes(true).Refresh(true))
+          .ColumnMenu()
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(p => p.Id))
+            .Read(read => read.Action("GetSubGroupProducts", "Allocation", new { aaasubGroupId = "#= Id #" }))
+            .Sort(s => s.Add(t => t.Name)))
+          .ToClientTemplate())
+</script>
+
+@(this.Html.Kendo()
+    .Window()
+    .Name("Product")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Events(s => s.Close("ProductWindowClose"))
+      .Title("Přidat produkt"))
+
+@(Html.Kendo().Window()
+              .Name("Images")
+              .Visible(false)
+              .Modal(true)
+              .Draggable(true)
+              .Title("Obrázky")
+              .Width(700))
+
+<script type="text/javascript">
+    var lastGroupOpendWindow = 0;
+    var lastSubGroupOpendWindow = 0;
+
+    function imageClick(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("Images", "Allocation", new { allocationId = "#= Id #" })))");
+        var url = urlTemplate(dataItem);
+        EditAjaxWindow("#Images", url);
+    }
+
+    function uploadImageSucces(e) {
+        var grid = $("#AllocationImagesGrid").data("kendoGrid");
+        grid.dataSource.read();
+    }
+
+    function SetMainImage(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("SetMainImage", "Allocation", new { imageId = "#= Id #" })))");
+        var url = urlTemplate(dataItem);
+
+        $.post(url).success(function () {
+            var grid = $("#AllocationImagesGrid").data("kendoGrid");
+            grid.dataSource.read();
+        });
+    }
+
+    function addCategoryProductClick(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("AddCategoryProduct", "Allocation", new { categoryId = "#= Id #" })))");
+        var url = urlTemplate(dataItem);
+
+        lastGroupOpendWindow = dataItem.id;
+
+        EditAjaxWindow("#Product", url);
+    }
+
+    function addGroupProductClick(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("AddGroupProduct", "Allocation", new { groupId = "#= Id #" })))");
+        var url = urlTemplate(dataItem);
+
+        lastGroupOpendWindow = dataItem.id;
+
+        EditAjaxWindow("#Product", url);
+    }
+
+    function addSubGroupProductClick(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("AddSubGroupProduct", "Allocation", new { subGroupId = "#= Id #" })))");
+        var url = urlTemplate(dataItem);
+
+        lastSubGroupOpendWindow = dataItem.id;
+
+        EditAjaxWindow("#Product", url);
+    }
+
+    function hideCategoryClick(e) {
+        hideAllocation(this, e);
+    }
+
+    function hideGroupClick(e) {
+        hideAllocation(this, e);
+    }
+
+    function hideSubGroupClick(e) {
+        hideAllocation(this, e);
+    }
+
+    function hideAllocation(o, e) {
+        if (confirm("Opravdu chcete schovat dané zařazení?")) {
+            var dataItem = o.dataItem($(e.currentTarget).closest("tr"));
+            var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("DisplayAllocation", "Allocation", new { aaaallocationId = "#= Id #", visible = false })))");
+            var url = urlTemplate(dataItem);
+
+            $.post(url).success(function () {
+                o.dataSource.read();
+            });
+        }
+    }
+
+    function showCategoryClick(e) {
+        showAllocation(this, e);
+    }
+
+    function showGroupClick(e) {
+        showAllocation(this, e);
+    }
+
+    function showSubGroupClick(e) {
+        showAllocation(this, e);
+    }
+
+    function showAllocation(o, e) {
+        if (confirm("Opravdu chcete zviditelnit dané zařazení?")) {
+            var dataItem = o.dataItem($(e.currentTarget).closest("tr"));
+            var urlTemplate = kendo.template("@Html.Raw(HttpUtility.UrlDecode(Url.Action("DisplayAllocation", "Allocation", new { aaaallocationId = "#= Id #", visible = true })))");
+            var url = urlTemplate(dataItem);
+
+            $.post(url).success(function () {
+                o.dataSource.read();
+            });
+        }
+    }
+
+    function categoryGridDataBound(e) {
+        dataBound(this, e);
+    }
+
+    function groupGridDataBound(e) {
+        dataBound(this, e);
+    }
+
+    function subGroupGridDataBound(e) {
+        dataBound(this, e);
+    }
+
+    function dataBound(o, e) {
+        var gridData = o.dataSource.view();
+
+        for (var i = 0; i < gridData.length; i++) {
+            var currentUid = gridData[i].uid;
+            var currenRow = o.table.find("tr[data-uid='" + currentUid + "']");
+            if (gridData[i].Visible) {
+                var showCategoryButton = $(currenRow).find(".k-grid-showCategoryAllocation");
+                showCategoryButton.hide();
+
+                var showGroupButton = $(currenRow).find(".k-grid-showGroupAllocation");
+                showGroupButton.hide();
+
+                var showSubGroupButton = $(currenRow).find(".k-grid-showSubGroupAllocation");
+                showSubGroupButton.hide();
+            } else {
+                var hideCategoryButton = $(currenRow).find(".k-grid-hideCategoryAllocation");
+                hideCategoryButton.hide();
+
+                var hideGroupButton = $(currenRow).find(".k-grid-hideGroupAllocation");
+                hideGroupButton.hide();
+
+                var hideSubGroupButton = $(currenRow).find(".k-grid-hideSubGroupAllocation");
+                hideSubGroupButton.hide();
+            }
+        }
+    }
+
+    function ProductWindowClose(e) {
+        refreshGrids();
+    }
+
+    function refreshGrids() {
+        if (lastGroupOpendWindow != 0) {
+            var categoryGrid = $("#productCategoryGrid_" + lastGroupOpendWindow).data("kendoGrid");
+            if (categoryGrid != undefined) {
+                categoryGrid.dataSource.read();
+            }
+        }
+
+        if (lastGroupOpendWindow != 0) {
+            var groupGrid = $("#productGroupGrid_" + lastGroupOpendWindow).data("kendoGrid");
+            if (groupGrid != undefined) {
+                groupGrid.dataSource.read();
+            }
+        }
+
+        if (lastSubGroupOpendWindow != 0) {
+            var subGroupGrid = $("#productSubGroupGrid_" + lastSubGroupOpendWindow).data("kendoGrid");
+            if (subGroupGrid != undefined) {
+                subGroupGrid.dataSource.read();
+            }
+        }
+
+        lastGroupOpendWindow = 0;
+        lastSubGroupOpendWindow = 0;
+    }
+
+    function removeCategoryProductClick(e) {
+        e.preventDefault();
+
+        var productId = this.dataItem($(e.currentTarget).closest("tr")).id;
+        var categoryId = e.target.dataset.categoryid;
+
+        var url = "@Url.Action("RemoveCategoryProduct", "Allocation")";
+        $.ajax({
+            type: "POST",
+            datatype: 'json',
+            url: url,
+            data: JSON.stringify({
+                "categoryId": categoryId,
+                "productId": productId
+            }),
+            success: function (data) {
+                lastGroupOpendWindow = categoryId;
+                refreshGrids();
+            },
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+
+    function removeGroupProductClick(e) {
+        e.preventDefault();
+
+        var productId = this.dataItem($(e.currentTarget).closest("tr")).id;
+        //var groupId = e.target.dataset.groupid;
+        var groupId = $(e.target).data("groupid");
+
+        var url = "@Url.Action("RemoveGroupProduct", "Allocation")";
+        $.ajax({
+            type: "POST",
+            datatype: 'json',
+            url: url,
+            data: JSON.stringify({
+                "productId": productId,
+                "groupId": groupId
+            }),
+            success: function (data) {
+                lastGroupOpendWindow = groupId;
+                refreshGrids();
+            },
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+
+    function removeSubGroupProductClick(e) {
+        e.preventDefault();
+
+        var productId = this.dataItem($(e.currentTarget).closest("tr")).id;
+        var subGroupId = $(e.target).data("subgroupid");
+
+        var url = "@Url.Action("RemoveSubGroupProduct", "Allocation")";
+        $.ajax({
+            type: "POST",
+            datatype: 'json',
+            url: url,
+            success: function (data) {
+                lastSubGroupOpendWindow = subGroupId;
+                refreshGrids();
+            },
+            data: JSON.stringify({
+                "productId": productId,
+                "subGroupId": subGroupId
+            }),
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+</script>

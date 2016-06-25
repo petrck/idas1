@@ -1,0 +1,12 @@
+﻿@using Kendo.Mvc.UI
+@model dynamic
+@{
+    var dataSourceName = this.ViewData.ModelMetadata.AdditionalValues["dataSourceName"] as string;
+    var dataTextField = this.ViewData.ModelMetadata.AdditionalValues["dataTextField"] as string;
+    var dataValueField = this.ViewData.ModelMetadata.AdditionalValues["dataValueField"] as string;
+    var placeholder = this.ViewData.ModelMetadata.AdditionalValues["placeholder"] as string;
+    var dataSource = this.ViewData[dataSourceName] as IEnumerable<DropDownListItem>;
+    dataSource = Enumerable.Repeat(new DropDownListItem { Text = "Není vybrána", Value = "0" }, 1).Concat(dataSource.OrderBy(item => item.Text));
+}
+
+@(Html.Kendo().MultiSelectFor(m => m).DataTextField(dataTextField).DataValueField(dataValueField).BindTo(dataSource).Placeholder(placeholder))

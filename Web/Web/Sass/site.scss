@@ -1,0 +1,25 @@
+﻿@import "bootstrap";
+
+@import "variables";
+@import "breadcrumb";
+@import "_columnheight.scss";
+@import "_layout.scss";
+@import "page/_home.scss";
+@import "page/_news.scss";
+@import "page/_photogallery.scss";
+
+@font-face {
+	font-family: 'OpenSansRegular';
+	src: url('/Fonts/OpenSans-Regular-webfont.eot');
+	src: url('/Fonts/OpenSans-Regular-webfont.eot') format('embedded-opentype'), url('/Fonts/OpenSans-Regular-webfont.woff') format('woff'), url('/Fonts/OpenSans-Regular-webfont.ttf') format('truetype');
+}
+
+body {
+	font-family: "OpenSansRegular";
+	//background-image: image-url("Images/PozadiStranky.jpg");
+	background-repeat: no-repeat;
+	background-position: center top;
+	/*font-family: "glyphicons-halflings-regular";*/
+	/*font-family: Arial;*/
+	font-size: 1.5em;
+}

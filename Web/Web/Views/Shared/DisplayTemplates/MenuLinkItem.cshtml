@@ -1,0 +1,16 @@
+﻿@using System.Diagnostics
+@using Erzasoft.CMS.Model
+@model Erzasoft.CMS.ViewModel.MenuItemViewModel
+@{
+    var menuLinkItem = Model.MenuItem as MenuLinkItem;
+    Debug.Assert(menuLinkItem != null);
+}
+
+@if (Model.HasChilds)
+{
+    <a href="@menuLinkItem.Href" title="@menuLinkItem.Tooltip" class="dropdown-toggle" data-toggle="dropdown">@menuLinkItem.Title <span class="caret"></span></a>
+}
+else
+{
+    <a href="@menuLinkItem.Href" title="@menuLinkItem.Tooltip">@menuLinkItem.Title</a>
+}

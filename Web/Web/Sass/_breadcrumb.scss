@@ -1,0 +1,55 @@
+﻿@import "_variables.scss";
+
+#breadcrumb {
+	margin-top: 10px;
+
+	.breadcrumb-item {
+		display: inline-block;
+
+		a, span, i {
+			color: #a5a5a5;
+			text-decoration: none;
+			position: relative;
+			margin: 0 3px;			
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+
+		&.level0 {
+
+			a span, i {
+				color: #a5a5a5;
+			}
+		}
+
+		&.level1 {
+
+			a span, i {
+				color: darken(#a5a5a5, 20%);
+			}
+		}
+
+		&.level2 {
+
+			a span, i {
+				color: darken(#a5a5a5, 40%);
+			}
+		}
+
+		&.level3 {
+
+			a span, i {
+				color: darken(#a5a5a5, 60%);
+			}
+		}
+
+		&.level4 {
+
+			a span, i {
+				color: darken(#a5a5a5, 80%);
+			}
+		}
+	}
+}

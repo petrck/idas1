@@ -1,0 +1,45 @@
+﻿@using Erzasoft.Web.Areas.Admin.Models
+@using Erzasoft.Web.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.HeaderTitle = "Správa pracovníků";
+}
+
+<section id="">
+    <div id="">
+        @(Html.Kendo().Grid<EmployeeViewModel>()
+                .Name("NewsGrid")
+              .Columns(columns =>
+              {
+                  columns.Bound(s => s.Firstname);
+                  columns.Bound(s => s.Lastname);
+                  columns.Bound(s => s.StartDate).Format("{0:dd.MM.yyyy}");
+                  columns.Bound(s => s.Pay);
+                  columns.Bound(s => s.Title);
+
+                  columns.Command(command =>
+                  {
+                      command.Edit();
+                      command.Destroy();
+                  });
+              })
+              .ToolBar(toolBar => toolBar.Create())
+              .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(window => window.Width(700)))
+              .Pageable(p => p.Refresh(true).PageSizes(true))
+              .Sortable()
+               .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+              .ColumnMenu()
+              .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model => model.Id(p => p.Id))
+                .Create("Create", "Employee")
+                        .Read("Read", "Employee")
+                        .Update("Update", "Employee")
+                        .Destroy("Delete", "Employee")
+                .Sort(s => s.Add(t => t.StartDate).Descending()))
+        )
+    </div>
+</section>
+

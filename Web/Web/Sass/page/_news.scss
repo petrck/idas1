@@ -1,0 +1,23 @@
+﻿/*
+===========================================
+                HEADER
+===========================================
+*/
+
+@import "../_variables.scss";
+@import "../bootstrap/_variables.scss";
+
+section {
+    .new-wrap {
+        background-color: rgba(31, 255, 0, 0.31);
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+
+        h2 {
+            margin: 0;
+            padding: 0; 
+        }
+    }
+    
+}

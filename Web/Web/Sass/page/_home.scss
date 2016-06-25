@@ -1,0 +1,86 @@
+﻿/*
+===========================================
+                HEADER
+===========================================
+*/
+
+@import "../_variables.scss";
+@import "../bootstrap/_variables.scss";
+
+section {
+    .home {
+
+        .article-background-wrap {
+             position: absolute
+        }
+
+        .article-background {
+           
+        }
+
+        a {
+            color: #5b9d5b;
+        }
+
+
+        #news {
+            height: 203px;
+            background-image: url("../Images/view-actualite.png");
+            background-repeat: no-repeat;
+            background-position: 50% 0;
+            text-align: center;
+            padding-top: 40px;
+
+            h1 {
+                font-size: 18px;
+                color: #5b9d5b;
+                font-weight: bold;
+            }
+
+            a {
+                display: block;
+            }
+        }
+
+
+        #classes {
+            height: 203px;
+            background-image: url("../Images/view-ourClass.png");
+            background-repeat: no-repeat;
+            background-position: 50% 0;
+            text-align: center;
+            padding-top: 90px;
+            padding-right: 60px;
+
+            a {
+                font-size: 18px;
+                font-weight: bold;
+            }
+        }
+
+        #contact {
+            height: 203px;
+            background-image: url("../Images/view-contact.png");
+            background-repeat: no-repeat;
+            background-position: 50% 0;
+            text-align: center;
+            padding-top: 40px;
+
+            a {
+                font-size: 18px;
+                color: #5b9d5b;
+                font-weight: bold;
+            }
+
+            span {
+                display: block;
+                font-size: 13px;
+                line-height: 22px;
+
+                &.fontBold {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

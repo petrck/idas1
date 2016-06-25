@@ -1,0 +1,36 @@
+@model List<Erzasoft.Web.Models.RoleModel>
+
+@{
+    Layout = null;
+    var userName = this.ViewData["userName"] as string;
+}
+
+<div>
+    <h4>Oprávnění uživatele @userName</h4>
+    <hr />
+    @using (Html.BeginForm("Roles", "Users", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        foreach (var roleModel in Model)
+        {
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBox("roles[" + roleModel.Nema + "]", roleModel.Selected) @roleModel.Nema
+                            @Html.Hidden("roles[" + roleModel.Nema + "]", false)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @Html.Hidden("userId")
+
+        <hr />
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary" type="submit">Uložit</button>
+            </div>
+        </div>
+    }
+</div>

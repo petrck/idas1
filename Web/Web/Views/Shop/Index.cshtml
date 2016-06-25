@@ -1,0 +1,46 @@
+﻿@using Erzasoft.Eshop.Helpers
+@using Erzasoft.Web.Areas.Admin.Models
+@using Erzasoft.Web.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.HeaderTitle = "Správa zákazníků (obchodů)";
+}
+
+<section id="">
+    <div id="">
+        @(Html.Kendo().Grid<ShopFormModel>()
+                .Name("NewsGrid")
+              .Columns(columns =>
+              {
+                  columns.Bound(s => s.Name);
+                  columns.Bound(s => s.Phone);
+                  columns.Bound(s => s.City);
+                  columns.Bound(s => s.Zip);
+                  columns.Bound(s => s.State);
+
+                  columns.Command(command =>
+                  {
+                      command.Edit();
+                      command.Destroy();
+                  });
+              })
+              .ToolBar(toolBar => toolBar.Create())
+              .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(window => window.Width(700)))
+              .Pageable(p => p.Refresh(true).PageSizes(true))
+              .Sortable()
+               .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+              .ColumnMenu()
+              .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model => model.Id(p => p.Id))
+                .Create("Create", "Shop")
+                        .Read("Read", "Shop")
+                        .Update("Update", "Shop")
+                        .Destroy("Delete", "Shop")
+                .Sort(s => s.Add(t => t.Id).Descending()))
+        )
+    </div>
+</section>
+

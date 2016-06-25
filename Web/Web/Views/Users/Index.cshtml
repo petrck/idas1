@@ -1,0 +1,47 @@
+@using Erzasoft.Web.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.Title = "Uživatelé";
+}
+
+<h2>Uživatelé</h2>
+
+@(Html.Kendo().Grid<UserModel>().Name("Users").Columns(columns =>
+      {
+          columns.Bound(p => p.UserName);
+          columns.Bound(p => p.Email);
+          columns.Bound(p => p.EmailConfirmed);
+          columns.Command(c => c.Custom("roles").Click("openrolewindow").Text("Oprávnění"));
+      })
+      .DataSource(source => source
+            .Ajax()
+            .Events(e => e.Error("griderror"))
+            .Model(model => model.Id(p => p.UserId))
+            .Read(read => read.Action("ReadData", "Users"))
+            .Create(create => create.Action("InsertData", "Users")))
+      .ToolBar(bar => bar.Create())
+      .Editable(edit => edit.Mode(GridEditMode.PopUp))
+      .Deferred())
+
+@Html.Kendo().Window().Name("rolewindow").Visible(false).Width(500).Title("Oprávnění uživatele").Deferred()
+
+@section scripts
+{
+    <script type="text/javascript">
+        function openrolewindow(e) {
+            e.preventDefault();
+
+            var tr = $(e.target).closest("tr");
+            var data = $("#Users").data("kendoGrid").dataItem(tr);
+            var url = "@Url.Action("Roles", "Users", new { userId = "userIdValu" })".replace("userIdValu", data.UserId);
+
+            EditAjaxWindow("#rolewindow", url);
+        }
+
+        function griderror(args) {
+            showGridError(args, "Users");
+        }
+    </script>
+}

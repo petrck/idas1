@@ -1,0 +1,8 @@
+@using Kendo.Mvc.UI
+@model DateTime?
+
+@{
+    Culture = "en-EN";
+}
+
+@(Html.Kendo().DateTimePickerFor(m => m).Format("yyyy/MM/dd").Culture(Culture))         

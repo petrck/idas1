@@ -1,0 +1,13 @@
+﻿@using System.Web.Mvc.Html
+@model Guid
+
+@{ var htmlAttributes = new Dictionary<string, object> { { "class", "k-input" } }; }
+@if (ViewData.ModelMetadata.IsReadOnly)
+{
+    htmlAttributes.Add("readonly", "readonly");
+}
+<div class="k-widget k-textbox k-state-default styledInput">
+
+        @Html.TextBoxFor(p => p, htmlAttributes)
+
+</div>

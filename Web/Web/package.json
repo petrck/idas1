@@ -1,0 +1,10 @@
+{
+  "version": "0.0.0",
+  "name": "",
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-sass": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-autoprefixer": "*"
+  }
+}

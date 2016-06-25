@@ -1,0 +1,35 @@
+﻿@using Kendo.Mvc.UI
+@model string
+
+@(Html.Kendo().EditorFor(m => m)
+     .HtmlAttributes(new { style = "width: 500px;" })
+     .Tools(tools => tools
+         .Clear()         
+         .Bold().Italic().Underline().Strikethrough()
+         .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+         .InsertUnorderedList().InsertOrderedList()
+         .Outdent().Indent()
+        .CreateLink().Unlink()
+        .InsertImage()
+        .InsertFile()
+        .TableEditing()
+        .ViewHtml()
+        .Formatting()
+        .CleanFormatting()
+        
+    )
+         .ImageBrowser(imageBrowser => imageBrowser
+            .Image("~/Upload/Editor/{0}")
+            .Read("Read", "ImageBrowser", new { area = "Admin" })
+                .Create("Create", "ImageBrowser", new { area = "Admin" })
+                .Destroy("Destroy", "ImageBrowser", new { area = "Admin" })
+                .Upload("Upload", "ImageBrowser", new { area = "Admin" })
+                .Thumbnail("Thumbnail", "ImageBrowser", new { area = "Admin" }))
+         .FileBrowser(fileBrowser => fileBrowser
+             .File("~/Upload/Editor/{0}")
+                 .Read("Read", "FileBrowser", new { area = "Admin" })
+                 .Create("Create", "FileBrowser", new { area = "Admin" })
+                 .Destroy("Destroy", "FileBrowser", new { area = "Admin" })
+                 .Upload("Upload", "FileBrowser", new { area = "Admin" })
+          )
+)

@@ -1,0 +1,72 @@
+.k-window-content.k-content, .k-widget.k-editor.k-header {
+	
+	table td {
+		max-width: 660px;
+		vertical-align: top;
+	}
+
+	table th {
+		text-align: left;
+		min-width: 110px;
+	}
+
+	table.k-editor {
+		height: auto;
+
+		td {
+		}
+	}
+
+	.k-editor-toolbar {
+		white-space: normal;	
+	}
+}
+
+.k-widget.k-tooltip-validation {
+	position: absolute;
+}
+
+.k-widget.k-window {
+
+	.k-edit-form-container, form {
+		width: auto;
+	
+		.editor-label {
+			width: auto;
+			text-align: left;
+		}
+
+		.editor-field {
+			width: 96%;
+			float: left;
+		}
+
+		.k-textbox>input, .k-input[type="text"] {
+			border-width: 0px;
+		}
+
+		.k-dropdown-wrap {
+			padding: 1px 1.9em 1px 0;
+		}
+
+		.k-numeric-wrap {
+			padding: 1px 1.9em 1px 0;
+		}
+
+		.k-picker-wrap {
+			padding: 1px 1.9em 1px 0;
+		}
+	}
+}
+
+.k-tabstrip-items .k-loading, .k-tabstrip .k-state-active {
+	border: 0;
+}
+
+.k-editor td.k-editable-area {
+	border: 0;
+}
+
+table.k-widget.k-editor {
+	height: 160px;
+}

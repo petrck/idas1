@@ -1,0 +1,68 @@
+﻿@using Erzasoft.DataModel
+@using Erzasoft.Eshop.Areas.Admin.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.Title = "Přidat produkt do podskupiny";
+    Layout = null;
+    var subGroup = ViewData["subGroup"] as Allocation;
+}
+
+<section id="admin-add-subGroup-product">
+    <hgroup>
+        <h1>@ViewBag.Title <b>@subGroup.Name</b></h1>
+    </hgroup>
+
+    <div id="adminShippingContent">
+        @(Html.Kendo().Grid<ProductModel>()
+              .Name("ProductGrid")
+              .Columns(columns =>
+                  {
+                      columns.Bound(s => s.IsSet).Visible(true).Width(20).Title("").ClientTemplate("<input type='checkbox' name='checkedProduct' value='#= Id #' # if (IsSet) { # checked # } # />");
+                      columns.Bound(s => s.Name);
+                  })
+              .Pageable(p => p.Refresh(true).PageSizes(true))
+              .Sortable()
+              .Filterable()
+              .ColumnMenu()
+              .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model => model.Id(p => p.Id))
+                        .Read("GetAllSubGroupProducts", "Allocation", new { subGroupId = subGroup.Id })
+                .Sort(s => s.Add(t => t.Name))
+              ))
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(function () {
+        var subGroupIdValue = "@subGroup.Id";
+
+        $("#ProductGrid").on("change", "input[name='checkedProduct']", function (event) {
+            var productIdValue = $(event.target).val();
+            var isSet;
+            if ($(event.target).prop("checked")) {
+                isSet = true;
+            } else {
+                isSet = false;
+            }
+
+            var url = "@Url.Action("AddSubGroupProduct","Allocation")";
+            $.ajax({
+                type: "POST",
+                datatype: 'json',
+                url: url,
+                success: function(data) {
+                     //$("#message").message("addMessage", data.message);
+                },
+                data: JSON.stringify({
+                    "subGroupId": subGroupIdValue,
+                    "productId": productIdValue,
+                    "isSet": isSet
+                }),
+                contentType: 'application/json; charset=utf-8'
+            });
+        });
+    });
+</script>

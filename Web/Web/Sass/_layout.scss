@@ -1,0 +1,144 @@
+﻿/*
+===========================================
+                HEADER
+===========================================
+*/
+
+@import "_variables.scss";
+@import "bootstrap/_variables.scss";
+
+body, html {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    color: #21531A;
+    font-size: 28px;
+    font-weight: normal;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    color: #21531A;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+h3 {
+    color: #21531A;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.navbar-right {
+    position: absolute;
+    right: 15px;
+    width: 255px;
+    z-index: 5;
+
+    li {
+        &#admin {
+            display: block;
+            float: right
+             
+        }
+    }
+
+    a {
+        color: #000;
+    }
+}
+
+//Oprava CMS editoru
+.k-tool-text {
+    display:none
+}
+
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -85px;
+
+    .fontBold {
+        font-weight: bold;
+    }
+
+    header {
+        position: relative;
+        height: 80px;
+        background-size: 100%;
+        background-color: #808080;
+
+        .homepage-link {
+            position: absolute;
+            width: 100%;
+            height: 220px;
+            z-index: 2;
+        }
+
+        .navbar {
+            position: relative;
+            top: 230px;
+            height: 30px;
+            background: none;
+            border: none;
+            z-index: 5;
+
+            .navbar-nav {
+                display: inline-block;
+                float: none;
+
+                a {
+                    padding: 5px;
+                    margin-left: 20px;
+                    margin-right: 20px;
+                }
+            }
+        }
+
+        .navbar .navbar-collapse {
+            text-align: center;
+        }
+    }
+
+    .push {
+        height: 84px;
+    }
+
+    aside {
+        margin-top: 100px;
+    }
+
+}
+
+footer {
+    width: 100%;
+    background-image: url("../Images/footerStrip.png");
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+    height: 84px;
+
+    .inner {
+        background-image: url("../Images/footer.png");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        height: 84px;
+        max-width: 840px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 135px;
+
+
+        a {
+            vertical-align: bottom;
+        }
+    }
+}

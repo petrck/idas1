@@ -1,0 +1,44 @@
+﻿@using Erzasoft.Web.Areas.Admin.Models
+@using Erzasoft.Web.Models
+@using Kendo.Mvc.UI
+@model dynamic
+
+@{
+    ViewBag.HeaderTitle = "Novinky a aktuality";
+}
+
+<section id="">
+    <div id="">
+        @(Html.Kendo().Grid<NewsModel>()
+                .Name("NewsGrid")
+              .Columns(columns =>
+              {
+                  columns.Bound(s => s.Name);
+                  columns.Bound(s => s.Text).Encoded(false);
+                  columns.Bound(s => s.Insert).Format("{0:dd.MM.yyyy}");
+                  columns.Bound(s => s.Order);
+                  columns.Command(command =>
+                  {
+                      //command.Custom()
+                      command.Edit();
+                      command.Destroy();
+                  });
+              })
+              .ToolBar(toolBar => toolBar.Create())
+              .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(window => window.Width(700)))
+              .Pageable(p => p.Refresh(true).PageSizes(true))
+              .Sortable()
+              .Filterable()
+              .ColumnMenu()
+              .DataSource(dataSource => dataSource
+                .Ajax()
+                .Model(model => model.Id(p => p.Id))
+                .Create("Create", "News")
+                        .Read("Read", "News")
+                        .Update("Update", "News")
+                        .Destroy("Delete", "News")
+                .Sort(s => s.Add(t => t.Insert).Descending()))
+                )
+    </div>
+</section>
+

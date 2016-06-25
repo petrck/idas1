@@ -1,0 +1,9 @@
+﻿@using System.Diagnostics
+@using Erzasoft.CMS.Model
+@model Erzasoft.CMS.ViewModel.MenuItemViewModel
+@{
+    var menuOrganizationalItem = Model.MenuItem as MenuOrganizationalItem;
+    Debug.Assert(menuOrganizationalItem != null);
+}         
+ 
+<a href="#" title="@menuOrganizationalItem.Tooltip">@menuOrganizationalItem.Title</a>
